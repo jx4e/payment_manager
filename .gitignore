@@ -40,3 +40,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Frontend ###
+
+/src/main/frontend/node_modules/

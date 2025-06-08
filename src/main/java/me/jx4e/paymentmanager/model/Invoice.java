@@ -47,6 +47,15 @@ public class Invoice implements HtmlRenderable {
 
     @Override
     public String generateHtml() {
+        UnescapedText[] expenseItems = expenses.stream()
+                .map(expense -> rawHtml(expense.generateHtml()))
+                .toArray(UnescapedText[]::new);
+
+        float total = expenses.stream()
+                .map(Expense::getValue)
+                .reduce(Float::sum)
+                .orElse(-1f);
+
         return html(
                 head(title("Invoice")),
                 body(
@@ -56,17 +65,13 @@ public class Invoice implements HtmlRenderable {
                         p("Issued By: "),
                         p(getIssuer().getName()),
                         h2("Expenses"),
-                        ul(expenses.stream()
-                                        .map(expense -> rawHtml(expense.generateHtml()))
-                                        .toArray(UnescapedText[]::new)),
-                        p("Total: $" + expenses.stream()
-                                .map(Expense::getValue)
-                                .reduce(Float::sum)
-                                .orElse(-1f))
+                        ul(expenseItems),
+                        p(String.format("Total: $%.2f", total))
                                 .withStyle("display:flex; justify-content:right;")
                 )
         ).render();
     }
+
 
     public String getTitle() {
         return title;
