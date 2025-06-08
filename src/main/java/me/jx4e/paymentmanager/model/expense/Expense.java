@@ -32,7 +32,7 @@ public abstract class Expense implements HtmlRenderable {
 
     @Override
     public String toString() {
-        return getName() + " | " + getDescription() + " | $" + getValue();
+        return getName() + " | " + getDescription() + " | $" + String.format("$%.2f", value);
     }
 
     @Override

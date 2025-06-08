@@ -2,6 +2,7 @@ package me.jx4e.paymentmanager.model.expense;
 
 import me.jx4e.paymentmanager.model.party.TransactionParty;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,7 +12,7 @@ public class TotalExpense extends Expense {
     }
 
     public Map<TransactionParty, SubExpense> splitByProportions(Map<TransactionParty, Float> proportions) {
-        Map<TransactionParty, SubExpense> expenseMap = new ConcurrentHashMap<>();
+        Map<TransactionParty, SubExpense> expenseMap = new LinkedHashMap<>();
 
         proportions.forEach((tp, f) -> {
             expenseMap.put(tp, getSubExpenseByProportion(tp, f));
@@ -21,7 +22,7 @@ public class TotalExpense extends Expense {
     }
 
     public Map<TransactionParty, SubExpense> splitByAmount(Map<TransactionParty, Float> amounts) {
-        Map<TransactionParty, SubExpense> expenseMap = new ConcurrentHashMap<>();
+        Map<TransactionParty, SubExpense> expenseMap = new LinkedHashMap<>();
 
         amounts.forEach((tp, f) -> {
             expenseMap.put(tp, getSubExpenseByValue(tp, f));

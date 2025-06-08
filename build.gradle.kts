@@ -2,7 +2,7 @@ plugins {
     id("java")
     id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
-    id("com.github.node-gradle.node") version "5.0.0"  // Node plugin
+    id("com.github.node-gradle.node") version "5.0.0"
 }
 
 group = "me.jx4e"
@@ -39,7 +39,7 @@ node {
     version.set("16.14.0")     // your Node.js version here
     npmVersion.set("8.3.1")    // your npm version here
     download.set(true)         // auto-download node/npm
-    workDir.set(file("${buildDir}/nodejs"))      // equivalent to installDirectory in Maven plugin
+    workDir.set(file("${layout.buildDirectory}/nodejs"))      // equivalent to installDirectory in Maven plugin
     nodeProjectDir.set(file("src/main/frontend")) // frontend working directory
 }
 

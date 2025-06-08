@@ -9,16 +9,23 @@
 
 <div class="max-w-3xl mx-auto bg-white rounded shadow p-8">
 
-    <h1 class="text-4xl font-bold mb-6 border-b pb-4" th:text="${invoiceTitle}">Invoice</h1>
+    <div class="mb-2 flex justify-between border-b pb-4 mb-6">
+        <h1 class="text-4xl font-bold" th:text="${invoiceTitle}">Invoice</h1>
+        <img alt="go birds!" src="/images/tbird.png" class="h-9 w-auto">
+    </div>
 
-    <div class="mb-6">
-        <p class="text-lg"><strong>Issued To:</strong> <span th:text="${issuedTo}">Client Name</span></p>
-        <p class="text-lg"><strong>Issued By:</strong> <span th:text="${issuedBy}">Your Company</span></p>
+    <div class="mb-2 flex justify-between">
+        <div class="mb-6">
+            <p class="text-lg"><strong>Issued To:</strong> <span th:text="${issuedTo}">Client Name</span></p>
+            <p class="text-lg"><strong>Issued By:</strong> <span th:text="${issuedBy}">Your Company</span></p>
+        </div>
+        <p class="">Date</p>
     </div>
 
     <h2 class="text-2xl font-semibold mb-4">Expenses</h2>
     <ul class="list-disc list-inside mb-6">
         <li th:each="expense : ${expenses}" class="mb-2 flex justify-between">
+            <span th:text="${expense.getName()}">Expense Name</span>
             <span th:text="${expense.description}">Expense description</span>
             <span class="font-semibold" th:text="${'$' + expense.value}">$0.00</span>
         </li>
@@ -28,7 +35,22 @@
         Total: <span th:text="${'$' + total}">0.00</span>
     </div>
 
+    <!-- Print Button -->
+    <div class="mt-6 text-center">
+        <button
+                type="button"
+                onclick="window.print()"
+                class="bg-blue-600 text-white font-semibold py-2 px-6 rounded hover:bg-blue-700 transition-colors"
+        >
+            Print Invoice
+        </button>
+    </div>
+
 </div>
+
+<footer class="fixed bottom-2 right-2 text-xs text-gray-500">
+    <p>&copy; 2025 Jake Gaunt. All rights reserved.</p>
+</footer>
 
 </body>
 </html>

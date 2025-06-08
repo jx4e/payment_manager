@@ -7,6 +7,7 @@ import me.jx4e.paymentmanager.model.expense.SubExpense;
 import me.jx4e.paymentmanager.model.expense.TotalExpense;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +22,7 @@ public class Statement {
         this.issuer = issuer;
         totalExpenses = new ArrayList<>();
         transactionParties = new ArrayList<>();
-        subExpenses = new ConcurrentHashMap<>();
+        subExpenses = new LinkedHashMap<>();
 
         transactionParties.add(issuer);
     }
