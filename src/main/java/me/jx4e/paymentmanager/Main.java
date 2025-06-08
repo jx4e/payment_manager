@@ -1,0 +1,47 @@
+package me.jx4e.paymentmanager;
+
+import me.jx4e.paymentmanager.model.Invoice;
+import me.jx4e.paymentmanager.model.Statement;
+import me.jx4e.paymentmanager.model.party.Issuer;
+import me.jx4e.paymentmanager.model.party.Recipient;
+import me.jx4e.paymentmanager.model.party.TransactionParty;
+import me.jx4e.paymentmanager.model.expense.TotalExpense;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) {
+        Issuer issuer = new Issuer("UBC Swimming");
+        Statement statement = new Statement(issuer);
+
+        Recipient recipient1 = new Recipient("R1");
+        Recipient recipient2 = new Recipient("R2");
+        Recipient recipient3 = new Recipient("R3");
+        statement.addTransactionParty(recipient1);
+        statement.addTransactionParty(recipient2);
+        statement.addTransactionParty(recipient3);
+
+        TotalExpense expense = new TotalExpense(
+                "Hotel",
+                "Hotel",
+                1000f
+        );
+        statement.addTotalExpense(expense);
+
+        Map<TransactionParty, Float> proportionalCostBreakdown = new HashMap<>();
+        proportionalCostBreakdown.put(recipient1, 0.2f);
+        proportionalCostBreakdown.put(recipient2, 0.5f);
+        proportionalCostBreakdown.put(recipient3, 0.5f);
+        statement.setProportionalExpenseBreakdown(expense, proportionalCostBreakdown);
+
+        Invoice totalInvoice = statement.getInvoice();
+
+        System.out.println(totalInvoice.print());
+
+        System.out.println(statement.getIndividualInvoice(recipient1).print());
+        System.out.println(statement.getIndividualInvoice(recipient2).print());
+        System.out.println(statement.getIndividualInvoice(recipient3).print());
+        System.out.println(statement.getUnpaidInvoice().print());
+    }
+}

@@ -1,4 +1,4 @@
-package me.jx4e.model.debtor;
+package me.jx4e.paymentmanager.model.party;
 
 public abstract class TransactionParty {
     private final String name;
