@@ -2,7 +2,12 @@ package me.jx4e.paymentmanager.model.expense;
 
 // YYJVC
 
-public abstract class Expense {
+import me.jx4e.paymentmanager.model.HtmlRenderable;
+
+import static j2html.TagCreator.li;
+import static j2html.TagCreator.span;
+
+public abstract class Expense implements HtmlRenderable {
     protected final String name;
     protected final String description;
     protected final float value;
@@ -28,5 +33,14 @@ public abstract class Expense {
     @Override
     public String toString() {
         return getName() + " | " + getDescription() + " | $" + getValue();
+    }
+
+    @Override
+    public String generateHtml() {
+        return li(
+                span(name),
+                span(description),
+                span(String.format("$%.2f", value))
+        ).withStyle("display:flex; justify-content:space-between;").render();
     }
 }

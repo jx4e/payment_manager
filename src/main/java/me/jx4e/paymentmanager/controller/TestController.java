@@ -1,17 +1,21 @@
-package me.jx4e.paymentmanager;
+package me.jx4e.paymentmanager.controller;
 
 import me.jx4e.paymentmanager.model.Invoice;
 import me.jx4e.paymentmanager.model.Statement;
+import me.jx4e.paymentmanager.model.expense.TotalExpense;
 import me.jx4e.paymentmanager.model.party.Issuer;
 import me.jx4e.paymentmanager.model.party.Recipient;
 import me.jx4e.paymentmanager.model.party.TransactionParty;
-import me.jx4e.paymentmanager.model.expense.TotalExpense;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Main {
-    public static void main(String[] args) {
+@RestController
+public class TestController {
+    @GetMapping("/api/test")
+    private String test() {
         Issuer issuer = new Issuer("UBC Swimming");
         Statement statement = new Statement(issuer);
 
@@ -33,7 +37,7 @@ public class Main {
             statement.addTotalExpense(
                     new TotalExpense(
                             "Expense " + (i + 1),
-                            "This is for bla bla bla",
+                            "This is for bla bla",
                             100f * (i + 1)
                     )
             );
@@ -47,8 +51,6 @@ public class Main {
 
         Invoice totalInvoice = statement.getUnpaidInvoice();
 
-        System.out.println(totalInvoice);
-
-        System.out.println(totalInvoice.generateHtml());
+        return totalInvoice.generateHtml();
     }
 }

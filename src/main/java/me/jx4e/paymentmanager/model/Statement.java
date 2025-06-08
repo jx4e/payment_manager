@@ -85,15 +85,15 @@ public class Statement {
 
     public Invoice getIndividualInvoice(TransactionParty transactionParty) {
         List<SubExpense> subExpenses = getSubExpenses(transactionParty);
-        return new Invoice(transactionParty, (List<Expense>) ((List<?>) subExpenses));
+        return new Invoice(issuer, transactionParty, (List<Expense>) ((List<?>) subExpenses));
     }
 
     public Invoice getInvoice() {
-        return new Invoice(issuer, (List<Expense>) ((List<?>) totalExpenses));
+        return new Invoice(issuer, issuer, (List<Expense>) ((List<?>) totalExpenses));
     }
 
     public Invoice getUnpaidInvoice() {
-        return new Invoice("Unpaid Expenses", issuer, (List<Expense>) ((List<?>) getUnpaidExpenses()));
+        return new Invoice("Unpaid Expenses", issuer, issuer, (List<Expense>) ((List<?>) getUnpaidExpenses()));
     }
 
     public List<TotalExpense> getTotalExpenses() {
