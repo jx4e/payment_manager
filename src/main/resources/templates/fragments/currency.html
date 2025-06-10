@@ -1,0 +1,47 @@
+<div th:fragment="currency(labelText)">
+    <div class="w-64 relative space-y-2"
+         th:with="ddId=${#ids.seq('currency')}, buttonId=${ddId + '-btn'}, listId=${ddId + '-list'}">
+        <!-- Label -->
+        <label th:for="${buttonId}" class="font-medium" th:text="${labelText}">Currency</label>
+
+        <!-- Button -->
+        <button th:id="${buttonId}" aria-haspopup="listbox" aria-expanded="false"
+                class="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <span class="flex items-center space-x-2">
+                <span>🇺🇸 USD - US Dollar</span>
+            </span>
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
+
+        <!-- Dropdown -->
+        <ul th:id="${listId}" th:attr="aria-labelledby=${buttonId}"
+            role="listbox" tabindex="-1"
+            class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto hidden">
+            <li role="option" tabindex="0"
+                class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100">
+                <span>🇺🇸 USD - US Dollar</span>
+            </li>
+            <li role="option" tabindex="0"
+                class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100">
+                <span>🇪🇺 EUR - Euro</span>
+            </li>
+            <li role="option" tabindex="0"
+                class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100">
+                <span>🇬🇧 GBP - British Pound</span>
+            </li>
+            <li role="option" tabindex="0"
+                class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100">
+                <span>🇨🇦 CAD - Canadian Dollar</span>
+            </li>
+        </ul>
+
+        <script th:inline="javascript" th:src="@{/js/dropdown.js}"></script>
+        <script th:inline="javascript">
+            setupDropdown([[${ddId}]])
+        </script>
+
+    </div>
+</div>

@@ -9,6 +9,9 @@ import org.thymeleaf.spring6.expression.Mvc;
 public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("/login");
-        registry.addViewController("/hello").setViewName("/hello");
+        registry.addViewController("/dashboard").setViewName("/dashboard");
+        registry.addViewController("/statements").setViewName("/statements");
+        registry.addViewController("/members").setViewName("/members");
+        registry.addViewController("/settings").setViewName("/settings");
     }
 }
