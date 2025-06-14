@@ -9,45 +9,45 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    private final MemberRepository memberRepository;
+    private final MemberRepository repository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public MemberService(MemberRepository repository) {
+        this.repository = repository;
     }
 
     public void addMember(Member member) {
-        memberRepository.save(member);
+        repository.save(member);
     }
 
     public void updateMember(Long id, Member updatedMember) {
-        Optional<Member> existingOptional = memberRepository.findById(id);
+        Optional<Member> existingOptional = repository.findById(id);
         if (existingOptional.isPresent()) {
             Member existing = existingOptional.get();
             existing.setName(updatedMember.getName());
             existing.setEmail(updatedMember.getEmail());
-            memberRepository.save(existing);
+            repository.save(existing);
         } else {
             throw new IllegalArgumentException("Member with ID " + id + " not found.");
         }
     }
 
     public void removeMember(Member member) {
-        memberRepository.delete(member);
+        repository.delete(member);
     }
 
     public void removeMemberById(Long id) {
-        if (memberRepository.existsById(id)) {
-            memberRepository.deleteById(id);
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
         } else {
             throw new IllegalArgumentException("Member with ID " + id + " not found.");
         }
     }
 
     public List<Member> getAllMembers() {
-        return memberRepository.findAll();
+        return repository.findAll();
     }
 
     public Optional<Member> getMemberById(Long id) {
-        return memberRepository.findById(id);
+        return repository.findById(id);
     }
 }

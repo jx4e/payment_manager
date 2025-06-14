@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>ThunderHQ | Statements</title>
+    <link rel="icon" type="image/png" href="/images/tbird.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex">
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
+<!-- Main Content -->
+<div class="ml-64 flex-1 p-8">
+    <main>
+        <div class="w-full h-full bg-white p-8 space-y-2 rounded shadow-md">
+            <!-- Title -->
+            <h1 class="text-2xl border-b p-2 font-semibold">Statements</h1>
+
+            <!-- Add Button -->
+            <button
+                    onclick="toggleModal('new-statement-form')"
+                    class="flex items-center px-4 py-2 rounded hover:bg-blue-100 text-gray-700"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Create a new statement
+            </button>
+
+            <!-- Statements List -->
+            <div class="space-y-2">
+                <div th:each="statement : ${statements}">
+                    <div class="w-full flex flex-col">
+                        <div class="h-full flex bg-white bg-opacity-50 p-6 rounded-2xl shadow-lg group">
+                            <h2
+                                    th:text="${statement.title}"
+                                    class="text-xl font-bold text-center text-gray-700 mb-4"
+                            ></h2>
+                            <div class="flex-grow">
+                                <!-- Content here will fill remaining space -->
+                            </div>
+                            <!-- Hidden by default, shown on hover -->
+                            <a
+                                    th:href="@{'/statements/' + ${statement.id}}"
+                                    class="text-sm text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-250"
+                            >
+                                View Statement
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Text -->
+            <p
+                    th:text="'Displaying ' + ${statements.size()} + ' statements'"
+                    class="text-gray-700 text-sm px-2"
+            >
+        </div>
+    </main>
+</div>
+
+<!-- New Statement Form -->
+<div
+        id="new-statement-form"
+        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50"
+>
+    <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl relative">
+        <button
+                type="button"
+                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                onclick="toggleModal('new-statement-form')"
+        >
+            &times;
+        </button>
+
+        <h2 class="text-xl font-semibold mb-4">Add New Statement</h2>
+
+        <form action="/statements/add" method="post" class="space-y-4" th:object="${object}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    required
+                    class="w-full border border-gray-300 p-2 rounded"
+            />
+
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            >
+                Submit
+            </button>
+        </form>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="/js/popup.js"></script>
+
+</body>
+</html>
