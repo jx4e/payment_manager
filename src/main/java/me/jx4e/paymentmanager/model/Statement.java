@@ -15,6 +15,9 @@ public class Statement {
     @OneToMany(mappedBy = "statement", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberStatement> memberStatements;
 
+    @OneToMany(mappedBy = "statement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses;
+
     public Statement() {}
 
     public Statement(String title, String email) {
@@ -43,5 +46,28 @@ public class Statement {
 
     public void setMemberStatements(List<MemberStatement> memberStatements) {
         this.memberStatements = memberStatements;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public double getTotalExpense() {
+        return expenses.stream()
+                .mapToDouble(Expense::getAmount)
+                .sum();
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
+    @Override
+    public String toString() {
+        return "Statement{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", memberStatements=" + memberStatements +
+                '}';
     }
 }

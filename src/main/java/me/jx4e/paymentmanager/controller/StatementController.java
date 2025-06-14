@@ -1,6 +1,9 @@
 package me.jx4e.paymentmanager.controller;
 
+import me.jx4e.paymentmanager.model.Expense;
+import me.jx4e.paymentmanager.model.Member;
 import me.jx4e.paymentmanager.model.Statement;
+import me.jx4e.paymentmanager.service.ExpenseService;
 import me.jx4e.paymentmanager.service.MemberService;
 import me.jx4e.paymentmanager.service.MemberStatementService;
 import me.jx4e.paymentmanager.service.StatementService;
@@ -18,15 +21,18 @@ public class StatementController {
     private final StatementService statementService;
     private final MemberService memberService;
     private final MemberStatementService memberStatementService;
+    private final ExpenseService expenseService;
 
     public StatementController(
             StatementService statementService,
             MemberService memberService,
-            MemberStatementService memberStatementService
+            MemberStatementService memberStatementService,
+            ExpenseService expenseService
     ) {
         this.statementService = statementService;
         this.memberService = memberService;
         this.memberStatementService = memberStatementService;
+        this.expenseService = expenseService;
     }
 
     @GetMapping
@@ -44,6 +50,7 @@ public class StatementController {
             model.addAttribute("statement", statement.get());
             model.addAttribute("memberStatements", statement.get().getMemberStatements());
             model.addAttribute("members", memberService.getAllMembers());
+            model.addAttribute("expenseObject", new Expense());
             return "statements/detail";
         }
 
@@ -71,11 +78,38 @@ public class StatementController {
         return "redirect:/statements";
     }
 
-    @PostMapping("/{id}/addmembers")
+    @PostMapping("/{id}/add/members")
     public String addMembersToStatement(@RequestParam("memberIds") List<Long> memberIds, @PathVariable("id") Long statementId) {
         for (Long memberId : memberIds) {
             memberStatementService.addMemberToStatement(memberId, statementId);
         }
+        return "redirect:/statements/" + statementId;
+    }
+
+    @PostMapping("/{statementid}/add/expense")
+    public String addExpenseToStatement(
+            @PathVariable("statementid") Long statementId,
+            @ModelAttribute("expense") Expense expense,
+            RedirectAttributes redirectAttributes
+    ) {
+        Optional<Statement> statement = statementService.getStatementById(statementId);
+        if (statement.isPresent()) {
+            expense.setStatement(statement.get());
+            expenseService.addExpense(expense);
+
+            redirectAttributes.addFlashAttribute("success", "Expense added successfully!");
+        }
+
+        return "redirect:/statements/" + statementId;
+    }
+
+    @PostMapping("/{id}/add/members/share")
+    public String addMembersToStatement(
+            @RequestParam("memberId") Long memberId,
+            @RequestParam("expenseId") Long expenseId,
+            @PathVariable("id") Long statementId
+    ) {
+
         return "redirect:/statements/" + statementId;
     }
 }

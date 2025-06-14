@@ -16,11 +16,20 @@
     <main>
         <div class="w-full h-full bg-white p-8 space-y-2 rounded shadow-md">
             <!-- Title -->
-            <h1
-                    th:text="${statement.title}"
-                    class="text-2xl border-b p-2 font-semibold"
-            ></h1>
+            <div class="flex justify-between border-b p-2">
+                <h1
+                        th:text="${statement.title}"
+                        class="text-2xl p-2 font-semibold"
+                ></h1>
+                <a href="/dashboard" class="flex items-center justify-between px-4 space-x-2 rounded hover:bg-blue-100 text-gray-700">
+                    Download Statement
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                </a>
+            </div>
 
+            <h2 class="text-xl font-semibold">Members</h2>
             <!-- Add Member -->
             <button
                     onclick="toggleModal('add-member-form')"
@@ -29,14 +38,116 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                Add members to statement
+                Add members
             </button>
-
             <!-- Members List -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div th:each="memberStatement : ${memberStatements}">
-                    <div th:text="${memberStatement.getMember().getName()}"></div>
+                    <div class="bg-white shadow-md rounded-lg p-6 max-w-sm w-full mx-auto mb-6 hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                        <div class="flex items-center justify-between gap-2">
+                            <!-- Avatar and Member Info -->
+                            <div class="flex items-center gap-4 flex-grow min-w-0">
+                                <div class="flex-shrink-0">
+                                    <div class="h-12 w-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-lg">
+                                        <span th:text="${#strings.substring(memberStatement.getMember().getName(), 0, 1)}">J</span>
+                                    </div>
+                                </div>
+                                <div class="min-w-0">
+                                    <h3 class="text-lg font-semibold text-gray-900 truncate" th:text="${memberStatement.getMember().getName()}">John Doe</h3>
+                                    <p class="text-sm text-gray-500 truncate" th:text="${memberStatement.getMember().getEmail()}">john@example.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <h2 class="text-xl font-semibold">Expenses</h2>
+            <!-- Add Expense -->
+            <button
+                    onclick="toggleModal('add-expense-form')"
+                    class="flex items-center px-4 py-2 rounded hover:bg-blue-100 text-gray-700"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Add expense
+            </button>
+            <div class="space-y-2">
+                <div th:each="expense : ${statement.getExpenses()}">
+                    <div class="w-full flex flex-col">
+                        <div class="bg-white shadow-md rounded-2xl p-6">
+                            <div class="h-full flex justify-between group">
+                                <div class="flex-col">
+                                    <h2
+                                            th:text="${expense.name}"
+                                            class="text-xl font-bold text-left text-gray-700 mb-4"
+                                    ></h2>
+                                    <p class="text-sm text-gray-500 truncate" th:text="${expense.getDescription()}"></p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h2
+                                            th:text="${expense.currency} + ' ' + ${expense.amount}"
+                                            class="text-xl font-bold text-right text-gray-700 mb-4"
+                                    ></h2>
+                                    <a
+                                            href="javascript:void(0)"
+                                            class="ml-auto text-sm text-blue-600 transition-opacity duration-250 cursor-pointer"
+                                            onclick="toggleExpenseText(this)"
+                                    >
+                                        View Expense
+                                    </a>
+                                </div>
+                            </div>
+                            <div
+                                    class="mt-2 text-gray-800 font-semibold overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out space-y-4"
+                                    style="max-height: 0;"
+                            >
+                                <h1 class="border-t p-2">Expense Breakdown</h1>
+                                <button
+                                        onclick="toggleModal('add-expense-share-form')"
+                                        class="flex items-center px-4 py-2 rounded hover:bg-blue-100 text-gray-700"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                    Add Member to Expense
+                                </button>
+                                <table class="min-w-full border-collapse border border-gray-300">
+                                    <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Member Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Amount</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr
+                                            th:each="share : ${expense.getExpenseShares()}"
+                                            class="hover:bg-gray-50">
+                                        <td
+                                                th:text="${share.getMember().getName()}"
+                                                class="border border-gray-300 px-4 py-2"
+                                        >
+                                            Name
+                                        </td>
+                                        <td
+                                                th:text="${share.getAmount()}"
+                                                class="border border-gray-300 px-4 py-2"
+                                        >
+                                            Name
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between border-b p-2">
+                <h2 class="text-xl font-semibold">Total</h2>
+                <h2 class="text-xl font-semibold" th:text="${statement.getTotalExpense()}"></h2>
             </div>
         </div>
     </main>
@@ -61,7 +172,8 @@
         <h2 class="text-xl font-semibold mb-4 flex-shrink-0">Add Members to Statement</h2>
 
         <form
-                th:action="@{/statements/{id}/addmembers(id=${statement.id})}"
+                th:action="@{/statements/{id}/add/members(id=${statement.id})}"
+                th:object="${expenseObject}"
                 method="post"
                 class="flex flex-col flex-grow min-h-0"
         >
@@ -99,9 +211,212 @@
     </div>
 </div>
 
+<div
+        id="add-expense-form"
+        class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50"
+>
+    <div
+            class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl relative max-h-[90vh] flex flex-col"
+    >
+        <button
+                type="button"
+                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                onclick="toggleModal('add-expense-form')"
+        >
+            &times;
+        </button>
+
+        <h2 class="text-xl font-semibold mb-4 flex-shrink-0">Add Expense to Statement</h2>
+
+        <form
+                th:action="@{/statements/{id}/add/expense(id=${statement.id})}"
+                method="post"
+                class="flex flex-col flex-grow min-h-0 space-y-2"
+        >
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <input type="hidden" th:name="statement.id" th:value="${statement.id}" />
+
+            <input
+                    type="text"
+                    name="name"
+                    placeholder="Expense Name"
+                    required
+                    class="w-full border border-gray-300 p-2 rounded"
+            />
+
+            <input
+                    type="number"
+                    name="amount"
+                    placeholder="Amount"
+                    required
+                    class="w-full border border-gray-300 p-2 rounded"
+            />
+
+            <input
+                    type="hidden"
+                    name="currency"
+                    id="currency-currency"
+                    value="CAD"
+            />
+
+            <button
+                    id="currency-btn"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    class="bg-white border border-gray-300 rounded-md px-4 py-2 text-left shadow-sm flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <span class="flex items-center space-x-2">
+                    <span>🇨🇦 CAD - Canadian Dollar</span>
+                </span>
+                <svg
+                        class="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <ul
+                    id="currency-list"
+                    role="listbox"
+                    tabindex="-1"
+                    class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto hidden"
+            >
+                <li
+                        data-currency="CAD"
+                        role="option"
+                        tabindex="0"
+                        class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100"
+                >
+                    <span>🇨🇦 CAD - Canadian Dollar</span>
+                </li>
+                <li
+                        data-currency="USD"
+                        role="option"
+                        tabindex="0"
+                        class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100"
+                >
+                    <span>🇺🇸 USD - US Dollar</span>
+                </li>
+                <li
+                        data-currency="GBP"
+                        role="option"
+                        tabindex="0"
+                        class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100"
+                >
+                    <span>🇬🇧 GBP - British Pound</span>
+                </li>
+                <li
+                        data-currency="EUR"
+                        role="option"
+                        tabindex="0"
+                        class="cursor-pointer select-none px-4 py-2 flex items-center space-x-2 hover:bg-blue-100"
+                >
+                    <span>🇪🇺 EUR - Euro</span>
+                </li>
+            </ul>
+
+            <textarea
+                    name="description"
+                    placeholder="Description"
+                    required
+                    class="w-full border border-gray-300 p-2 rounded"
+            ></textarea>
+
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex-shrink-0"
+            >
+                Submit
+            </button>
+        </form>
+    </div>
+</div>
+
+<div
+        id="add-expense-share-form"
+        class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50"
+>
+    <div
+            class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl relative max-h-[90vh] flex flex-col"
+    >
+        <button
+                type="button"
+                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                onclick="toggleModal('add-expense-share-form')"
+        >
+            &times;
+        </button>
+
+        <h2 class="text-xl font-semibold mb-4 flex-shrink-0">Add Members to Expense</h2>
+
+        <form
+                th:action="@{/statements/{id}/add/expense/share(id=${statement.id})}"
+                th:object="${expenseObject}"
+                method="post"
+                class="flex flex-col flex-grow min-h-0"
+        >
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <!-- Scrollable members container -->
+            <div class="flex-grow overflow-y-auto space-y-2 mb-4 bg-gray-100 p-2 rounded-2xl min-h-0">
+                <div th:each="memberStatement : ${statement.getMemberStatements()}"
+                    th:with="member=${memberStatement.getMember()}">
+                    <div class="w-full flex flex-col">
+                        <label
+                                class="flex items-center space-x-4 p-4 bg-white bg-opacity-50 rounded-2xl shadow-lg cursor-pointer group"
+                        >
+                            <input
+                                    type="checkbox"
+                                    name="memberIds"
+                                    th:value="${member.id}"
+                                    class="h-6 w-6 text-blue-600 rounded"
+                            />
+                            <h2
+                                    th:text="${member.name}"
+                                    class="text-xl font-bold text-gray-700"
+                            ></h2>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex-shrink-0"
+            >
+                Submit
+            </button>
+        </form>
+    </div>
+</div>
+
 <div th:replace="fragments/footer :: footer"></div>
 
 <script src="/js/modal.js"></script>
+<script src="/js/dropdown.js"></script>
+<script>setupDropdown('currency')</script>
+<script>
+    function toggleExpenseText(linkElement) {
+        const parent = linkElement.closest('.w-full.flex.flex-col');
+        if (!parent) return;
+
+        const content = parent.querySelector('div.mt-2.text-gray-800');
+        if (!content) return;
+
+        if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+            // Close it
+            content.style.maxHeight = '0';
+        } else {
+            // Open it - set maxHeight to scrollHeight to enable smooth expand
+            content.style.maxHeight = content.scrollHeight + 'px';
+        }
+    }
+</script>
 
 </body>
 </html>

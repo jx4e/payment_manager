@@ -1,8 +1,9 @@
 function setupDropdown(ddId) {
     const button = document.getElementById(ddId + '-btn');
     const list = document.getElementById(ddId + '-list');
+    const hiddenInput = document.getElementById(ddId + '-currency');
 
-    if (!button || !list) return;
+    if (!button || !list || !hiddenInput) return;
 
     button.addEventListener('click', () => {
         const expanded = button.getAttribute('aria-expanded') === 'true';
@@ -12,7 +13,16 @@ function setupDropdown(ddId) {
 
     list.querySelectorAll('li').forEach(item => {
         item.addEventListener('click', () => {
-            button.firstElementChild.textContent = item.textContent;
+            const selectedText = item.textContent;
+            const selectedCurrency = item.getAttribute('data-currency');
+
+            // Update button display text
+            button.querySelector('span > span').textContent = selectedText;
+
+            // Update hidden input value
+            hiddenInput.value = selectedCurrency;
+
+            // Close dropdown
             button.setAttribute('aria-expanded', 'false');
             list.classList.add('hidden');
         });
