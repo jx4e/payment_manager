@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>ThunderHQ | Statements</title>
+    <title>ThunderHQ | Members</title>
     <link rel="icon" type="image/png" href="/images/tbird.png" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <p th:text="'Displaying ' + ${members.size()} + ' members'"></p>
+            <p th:text="'Displaying ' + ${members.size()} + ' members'" class="text-gray-700 text-sm px-2"></p>
         </div>
     </main>
 </div>
