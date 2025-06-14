@@ -18,13 +18,13 @@
             <h1 class="text-2xl border-b p-2 font-semibold">Members</h1>
 
             <!-- Popup Modal -->
-            <button onclick="toggleModal('form')" class="flex items-center px-4 py-2 rounded hover:bg-blue-100 text-gray-700">
+            <button onclick="toggleModal('newmemberform')" class="flex items-center px-4 py-2 rounded hover:bg-blue-100 text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 Create a new member
             </button>
-            <div th:replace="fragments/member-form-popup :: popup('form')"></div>
+            <div th:replace="fragments/member-form-popup :: new-popup('newmemberform')"></div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div th:each="member : ${members}">

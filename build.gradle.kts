@@ -27,6 +27,12 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // Faker
+    implementation("com.github.javafaker:javafaker:0.14") {
+        exclude(group = "org.yaml", module = "snakeyaml")
+    }
+    implementation("org.yaml:snakeyaml:2.0")
+
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
