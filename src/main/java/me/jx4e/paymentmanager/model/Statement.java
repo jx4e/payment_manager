@@ -1,16 +1,19 @@
 package me.jx4e.paymentmanager.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Statement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
+
+    @OneToMany(mappedBy = "statement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberStatement> memberStatements;
 
     public Statement() {}
 
@@ -32,5 +35,13 @@ public class Statement {
 
     public void setTitle(String name) {
         this.title = name;
+    }
+
+    public List<MemberStatement> getMemberStatements() {
+        return memberStatements;
+    }
+
+    public void setMemberStatements(List<MemberStatement> memberStatements) {
+        this.memberStatements = memberStatements;
     }
 }
